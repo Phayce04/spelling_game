@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--first mini game project - Ahron Mosqe Gabriel C. Javier-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Correction Game - Ahron Javier</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; 
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #d1f7d1, #b8e7b8); 
+            color: #4A4A4A;
+        }
+
+        #gameContainer {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #e3f7e3; 
+            border: 2px solid #b0e2b0; 
+            border-radius: 20px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50; 
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        #misspelledWord {
+            font-size: 1.8rem;
+            color: #6CBF6F; 
+            margin: 20px 0;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #b0e2b0; 
+            border-radius: 10px;
+            background: #e3f7e3; 
+            color: #4A4A4A;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 8px #6CBF6F; 
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #4CAF50; 
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049; 
+            transform: scale(1.05);
+        }
+
+        #feedback {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            font-style: italic;
+            color: red;
+        }
+
+        #timer {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #4CAF50; 
+        }
+
+        #levelDisplay {
+            font-size: 1.5rem;
+            color: #6CBF6F; 
+            margin-bottom: 10px;
+        }
+
+        #retryBtn {
+            display: none;
+            padding: 12px 25px;
+            background-color: #FF7EA7;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #retryBtn:hover {
+            background-color: #FF6392; 
+        }
+
+        @media (max-width: 500px) {
+            #gameContainer {
+                width: 90%;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            #misspelledWord {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 10px 18px;
+            }
+
+            #retryBtn {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h1>Word Correction Game</h1>
+        <p id="levelDisplay">Level 1</p>
+        <p id="misspelledWord"></p>
+        <input type="text" id="userInput" placeholder="Correct the word">
+        <button id="submitBtn">Submit</button>
+        <p id="feedback"></p>
+        <p id="timer"></p>
+        <button id="retryBtn" onclick="retryLevel()">Retry</button>
+    </div>
+
+    <script>
+        //gpt generated lang
+        const words = [
+            { misspelled: "Accomodation", correct: "Accommodation" }, 
+            { misspelled: "Buisness", correct: "Business" }, 
+            { misspelled: "Recomendation", correct: "Recommendation" }, 
+            { misspelled: "Inconcievable", correct: "Inconceivable" }, 
+            { misspelled: "Unforseeable", correct: "Unforeseeable" } 
+        ];
+    
+        let currentLevel = 0;
+        let timerInterval;
+    
+        function loadLevel(){
+            if (currentLevel >= words.length) {
+                document.getElementById("gameContainer").innerHTML = "<h1>Congratulations! You finished all levels!</h1>";
+                return;
+            }
+            document.getElementById("levelDisplay").textContent = `Level ${currentLevel + 1}`;
+            document.getElementById("misspelledWord").textContent = words[currentLevel].misspelled;
+            document.getElementById("userInput").value = "";
+            document.getElementById("feedback").textContent = "";  
+            document.getElementById("retryBtn").style.display = "none";
+            document.getElementById("submitBtn").style.display = "inline-block";
+    
+            startTimer();
+        }
+    
+        function startTimer(){
+            let timeLeft = 10 - currentLevel; 
+            const timerDisplay = document.getElementById("timer");
+            timerDisplay.textContent = `Time left: ${timeLeft}s`;
+    
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Time left: ${timeLeft}s`;
+    
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame("Time's up! Please try again.");
+                }
+            }, 1000);
+        }
+    
+        function endGame(message){
+            document.getElementById("feedback").textContent = message;
+            document.getElementById("submitBtn").style.display = "none";
+            document.getElementById("retryBtn").style.display = "inline-block";
+        }
+    
+        function retryLevel(){
+            document.getElementById("feedback").textContent = "";
+            loadLevel();
+        }
+    
+        function handleSubmit(){
+            const userInput = document.getElementById("userInput").value;
+            const feedback = document.getElementById("feedback");
+    
+            if (userInput === words[currentLevel].correct) {
+                feedback.textContent = "Correct! Moving to the next level...";
+                feedback.style.color = "green";
+                clearInterval(timerInterval);
+    
+                setTimeout(() => {
+                    currentLevel++;
+                    loadLevel();
+                }, 1000);
+            } else {
+                endGame("Incorrect answer! Please try again.");
+            }
+        }
+    
+        document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+        document.getElementById("userInput").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                handleSubmit();
+            }
+        });
+    
+        loadLevel();
+    </script>
+    
+</body>
+</html>
