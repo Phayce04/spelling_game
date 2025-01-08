@@ -2,6 +2,7 @@
   "name": "spelling_game",
   "version": "1.0.0",
   "main": "index.js",
+  "type":"module",
   "scripts": {
     "start": "nodemon --env-file=.env ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
