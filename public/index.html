@@ -145,15 +145,19 @@
     </div>
 
     <script>
-        //gpt generated lang
-        const words = [
-            { misspelled: "Accomodation", correct: "Accommodation" }, 
-            { misspelled: "Buisness", correct: "Business" }, 
-            { misspelled: "Recomendation", correct: "Recommendation" }, 
-            { misspelled: "Inconcievable", correct: "Inconceivable" }, 
-            { misspelled: "Unforseeable", correct: "Unforeseeable" } 
-        ];
-    
+    let words = [];
+            const fetchWords=async () => {
+                const response= await fetch('/api/words')
+                if(!response.ok){
+                    throw new Error("error fetching words")
+                }
+                   words=await response.json()
+            }
+            const loadWords=async () => {
+                await fetchWords()
+                loadLevel()
+            }
+           
         let currentLevel = 0;
         let timerInterval;
     
@@ -225,7 +229,7 @@
             }
         });
     
-        loadLevel();
+        loadWords()  
     </script>
     
 </body>

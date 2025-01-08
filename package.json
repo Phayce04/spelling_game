@@ -2,7 +2,7 @@
   "name": "spelling_game",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "start": "nodemon --env-file=.env ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,8 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "random-words": "^2.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

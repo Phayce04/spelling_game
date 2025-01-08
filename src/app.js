@@ -1,6 +1,7 @@
 import express from 'express'
 import path, {dirname} from 'path'
 import { fileURLToPath } from 'url';
+import wordArray from './words.js';
 const app =express();
 const PORT=process.env.PORT||3004
 //json requests
@@ -18,8 +19,8 @@ res.sendFile(path.join(__dirname,'public','index.html'))
 })
 
 //api routes  
-app.get('/api/words',()=>{
-  res.send("words")
+app.get('/api/words',(req,res)=>{
+  res.send(wordArray)
 })
 
 app.listen(PORT , ()=>{
